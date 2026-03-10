@@ -5,7 +5,11 @@ use App\Http\Controllers\Admin;
 use App\Http\Controllers\Public;
 use Illuminate\Support\Facades\Route;
 
-// Public Routes
+/*
+|--------------------------------------------------------------------------
+| Public Routes
+|--------------------------------------------------------------------------
+*/
 
 // Quote submission
 Route::post('/quotes', [Public\QuoteController::class, 'store']);
@@ -18,14 +22,21 @@ Route::get('/tours/{slug}', [Public\TourController::class, 'show']);
 Route::get('/blog',         [Public\BlogController::class, 'index']);
 Route::get('/blog/{slug}',  [Public\BlogController::class, 'show']);
 
-
-// Admin Auth (public)
+/*
+|--------------------------------------------------------------------------
+| Admin Auth (public)
+|--------------------------------------------------------------------------
+*/
 
 Route::prefix('admin')->group(function () {
     Route::post('/login',   [AdminAuthController::class, 'login']);
     Route::post('/refresh', [AdminAuthController::class, 'refresh']);
 
-    // Admin Protected Routes — JWT required
+    /*
+    |----------------------------------------------------------------------
+    | Admin Protected Routes — JWT required
+    |----------------------------------------------------------------------
+    */
     Route::middleware('auth:admin')->group(function () {
 
         // Auth
@@ -66,5 +77,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/bookings/{booking}',            [Admin\BookingController::class, 'show']);
         Route::patch('/bookings/{booking}',          [Admin\BookingController::class, 'update']);
         Route::delete('/bookings/{booking}',         [Admin\BookingController::class, 'destroy']);
+
+        // Settings
+        Route::get('/settings',   [Admin\SettingsController::class, 'index']);
+        Route::patch('/settings', [Admin\SettingsController::class, 'update']);
     });
 });
