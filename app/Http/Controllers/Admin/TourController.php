@@ -70,19 +70,30 @@ class TourController extends Controller
 
     // POST /api/admin/tours/{id}/images
     public function uploadImage(Request $request, Tour $tour): JsonResponse
-    {
-        $request->validate(['image' => 'required|image|max:10240']);
+        {
+            $request->validate([
+                'image' => 'required|image|max:10240'
+            ]);
 
-        $result = Cloudinary::upload($request->file('image')->getRealPath(), [
-            'folder' => 'balbina/tours',
-        ]);
+            $upload = Cloudinary::uploadApi()->upload(
+            $request->file('image')->getRealPath(),
+            ['folder' => 'balbina/tours']
+        );
 
-        $images   = $tour->images ?? [];
-        $images[] = $result->getSecurePath();
-        $tour->update(['images' => $images]);
+        $image = [
+            'url' => $upload['secure_url'],
+            'public_id' => $upload['public_id'],
+        ];
 
-        return response()->json(['url' => $result->getSecurePath()]);
-    }
+            $images = $tour->images ?? [];
+            $images[] = $image;
+
+            $tour->update([
+                'images' => $images
+            ]);
+
+            return response()->json($image);
+        }
 
     // ── Shared validation ─────────────────────────────────────────────────────
 
