@@ -70,13 +70,14 @@ class BlogController extends Controller
     {
         $request->validate(['image' => 'required|image|max:10240']);
 
-        $result = Cloudinary::upload($request->file('image')->getRealPath(), [
-            'folder' => 'balbina/blog',
-        ]);
+        $upload = Cloudinary::uploadApi()->upload(
+            $request->file('image')->getRealPath(),
+            ['folder' => 'balbina/blog']
+        );
 
-        $blogPost->update(['cover_image' => $result->getSecurePath()]);
+        $blogPost->update(['cover_image' => $upload['secure_url']]);
 
-        return response()->json(['url' => $result->getSecurePath()]);
+        return response()->json(['url' => $upload['secure_url']]);
     }
 
     // ── Shared validation ─────────────────────────────────────────────────────
@@ -94,6 +95,8 @@ class BlogController extends Controller
             'cover_image' => 'nullable|string|url',
             'published'   => 'nullable|boolean',
             'author'      => 'nullable|string|max:100',
+            'author_bio'  => 'nullable|string|max:1000',
+            'read_time'   => 'nullable|integer|min:1|max:120',
         ]);
     }
 }

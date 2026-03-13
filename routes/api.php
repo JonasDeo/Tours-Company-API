@@ -14,8 +14,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('/quotes',      [Public\QuoteController::class, 'store']);
 Route::get('/tours',        [Public\TourController::class, 'index']);
 Route::get('/tours/{slug}', [Public\TourController::class, 'show']);
-Route::get('/blog',         [Public\BlogController::class, 'index']);
-Route::get('/blog/{slug}',  [Public\BlogController::class, 'show']);
+Route::get('/testimonials',                  [Public\TestimonialController::class, 'index']);
+Route::get('/blog',                          [Public\BlogController::class, 'index']);
+Route::get('/blog/{blogPost:slug}',          [Public\BlogController::class, 'show']);
+Route::get('/blog/{blogPost:slug}/comments', [Public\CommentController::class, 'index']);
+Route::post('/blog/{blogPost:slug}/comments',[Public\CommentController::class, 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +68,14 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::delete('/blog/{blogPost}',        [Admin\BlogController::class, 'destroy']);
     Route::patch('/blog/{blogPost}/publish', [Admin\BlogController::class, 'togglePublish']);
     Route::post('/blog/{blogPost}/cover',    [Admin\BlogController::class, 'uploadCover']);
+
+    // Testimonials
+    Route::get('/testimonials',                              [Admin\TestimonialController::class, 'index']);
+    Route::post('/testimonials',                             [Admin\TestimonialController::class, 'store']);
+    Route::put('/testimonials/{testimonial}',                [Admin\TestimonialController::class, 'update']);
+    Route::delete('/testimonials/{testimonial}',             [Admin\TestimonialController::class, 'destroy']);
+    Route::post('/testimonials/{testimonial}/avatar',        [Admin\TestimonialController::class, 'uploadAvatar']);
+    Route::patch('/testimonials/reorder',                    [Admin\TestimonialController::class, 'reorder']);
 
     // Bookings
     Route::get('/bookings',              [Admin\BookingController::class, 'index']);

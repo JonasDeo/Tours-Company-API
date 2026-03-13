@@ -22,7 +22,8 @@ class BlogController extends Controller
         return response()->json(
             $query->select([
                 'id', 'title', 'slug', 'category', 'tags',
-                'excerpt', 'cover_image', 'author',
+                'excerpt', 'cover_image',
+                'author', 'author_bio', 'read_time',
                 'read_count', 'created_at',
             ])->get()
         );
