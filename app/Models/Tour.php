@@ -11,19 +11,23 @@ class Tour extends Model
     protected $fillable = [
         'title', 'slug', 'destination', 'type',
         'duration_days', 'price', 'currency',
-        'description', 'excerpt', 'images',
-        'included', 'excluded', 'tags', 'published',
+        'excerpt', 'description',
+        'departure_location', 'return_location',
+        'highlights', 'itinerary',
+        'images', 'included', 'excluded', 'tags',
+        'published',
     ];
 
     protected $casts = [
-        'images'    => 'array',
-        'included'  => 'array',
-        'excluded'  => 'array',
-        'tags'      => 'array',
-        'published' => 'boolean',
+        'images'     => 'array',
+        'included'   => 'array',
+        'excluded'   => 'array',
+        'tags'       => 'array',
+        'highlights' => 'array',
+        'itinerary'  => 'array',
+        'published'  => 'boolean',
     ];
 
-    // Auto-generate slug from title
     protected static function booted(): void
     {
         static::creating(function (Tour $tour) {
@@ -38,7 +42,6 @@ class Tour extends Model
         return $this->hasMany(Booking::class);
     }
 
-    // Only return published tours for public queries
     public function scopePublished($query)
     {
         return $query->where('published', true);

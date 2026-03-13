@@ -70,52 +70,58 @@ class TourController extends Controller
 
     // POST /api/admin/tours/{id}/images
     public function uploadImage(Request $request, Tour $tour): JsonResponse
-        {
-            $request->validate([
-                'image' => 'required|image|max:10240'
-            ]);
+    {
+        $request->validate([
+            'image' => 'required|image|max:10240'
+        ]);
 
-            $upload = Cloudinary::uploadApi()->upload(
+        $upload = Cloudinary::uploadApi()->upload(
             $request->file('image')->getRealPath(),
             ['folder' => 'balbina/tours']
         );
 
         $image = [
-            'url' => $upload['secure_url'],
+            'url'       => $upload['secure_url'],
             'public_id' => $upload['public_id'],
         ];
 
-            $images = $tour->images ?? [];
-            $images[] = $image;
+        $images   = $tour->images ?? [];
+        $images[] = $image;
 
-            $tour->update([
-                'images' => $images
-            ]);
+        $tour->update(['images' => $images]);
 
-            return response()->json($image);
-        }
+        return response()->json($image);
+    }
 
     // ── Shared validation ─────────────────────────────────────────────────────
 
     private function validated(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            'title'        => 'required|string|max:200',
-            'slug'         => 'nullable|string|unique:tours,slug,' . $ignoreId,
-            'destination'  => 'required|string|max:100',
-            'type'         => 'required|in:GUIDED,SELF_DRIVE,MOUNTAIN,BEACH',
-            'duration_days'=> 'required|integer|min:1|max:60',
-            'price'        => 'required|integer|min:0',
-            'currency'     => 'nullable|string|size:3',
-            'description'  => 'required|string',
-            'excerpt'      => 'nullable|string|max:500',
-            'included'     => 'nullable|array',
-            'included.*'   => 'string',
-            'excluded'     => 'nullable|array',
-            'excluded.*'   => 'string',
-            'tags'         => 'nullable|array',
-            'tags.*'       => 'string',
-            'published'    => 'nullable|boolean',
+            'title'              => 'required|string|max:200',
+            'slug'               => 'nullable|string|unique:tours,slug,' . $ignoreId,
+            'destination'        => 'required|string|max:100',
+            'type'               => 'required|in:GUIDED,SELF_DRIVE,MOUNTAIN,BEACH,CAR_RENTAL',
+            'duration_days'      => 'required|integer|min:1|max:60',
+            'price'              => 'required|integer|min:0',
+            'currency'           => 'nullable|string|size:3',
+            'excerpt'            => 'nullable|string|max:500',
+            'description'        => 'required|string',
+            'departure_location' => 'nullable|string|max:200',
+            'return_location'    => 'nullable|string|max:200',
+            'highlights'         => 'nullable|array',
+            'highlights.*'       => 'string|max:300',
+            'itinerary'          => 'nullable|array',
+            'itinerary.*.day'    => 'required|integer',
+            'itinerary.*.title'  => 'required|string|max:300',
+            'itinerary.*.desc'   => 'nullable|string',
+            'included'           => 'nullable|array',
+            'included.*'         => 'string',
+            'excluded'           => 'nullable|array',
+            'excluded.*'         => 'string',
+            'tags'               => 'nullable|array',
+            'tags.*'             => 'string|max:100',
+            'published'          => 'nullable|boolean',
         ]);
     }
 }

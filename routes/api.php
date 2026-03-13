@@ -7,79 +7,73 @@ use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
-| Public Routes
+| Public Routes — no auth needed
 |--------------------------------------------------------------------------
 */
 
-// Quote submission
-Route::post('/quotes', [Public\QuoteController::class, 'store']);
-
-// Tours
+Route::post('/quotes',      [Public\QuoteController::class, 'store']);
 Route::get('/tours',        [Public\TourController::class, 'index']);
 Route::get('/tours/{slug}', [Public\TourController::class, 'show']);
-
-// Blog
 Route::get('/blog',         [Public\BlogController::class, 'index']);
 Route::get('/blog/{slug}',  [Public\BlogController::class, 'show']);
 
 /*
 |--------------------------------------------------------------------------
-| Admin Auth (public)
+| Admin Auth — public (no JWT needed)
 |--------------------------------------------------------------------------
 */
 
-Route::prefix('admin')->group(function () {
-    Route::post('/login',   [AdminAuthController::class, 'login']);
-    Route::post('/refresh', [AdminAuthController::class, 'refresh']);
+Route::post('/admin/login',   [AdminAuthController::class, 'login']);
+Route::post('/admin/refresh', [AdminAuthController::class, 'refresh']);
 
-    /*
-    |----------------------------------------------------------------------
-    | Admin Protected Routes — JWT required
-    |----------------------------------------------------------------------
-    */
-    Route::middleware('auth:admin')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| Admin Protected — JWT required, admin guard
+|--------------------------------------------------------------------------
+*/
 
-        // Auth
-        Route::post('/logout', [AdminAuthController::class, 'logout']);
-        Route::get('/me',      [AdminAuthController::class, 'me']);
-        Route::put('/me',      [AdminAuthController::class, 'updateMe']);
+Route::middleware('auth:admin')->prefix('admin')->group(function () {
 
-        // Dashboard
-        Route::get('/dashboard/stats', [Admin\DashboardController::class, 'stats']);
+    // Auth
+    Route::post('/logout',  [AdminAuthController::class, 'logout']);
+    Route::get('/me',       [AdminAuthController::class, 'me']);
+    Route::put('/me',       [AdminAuthController::class, 'updateMe']);
 
-        // Quotes
-        Route::get('/quotes',          [Admin\QuoteController::class, 'index']);
-        Route::get('/quotes/{quote}',  [Admin\QuoteController::class, 'show']);
-        Route::patch('/quotes/{quote}',[Admin\QuoteController::class, 'update']);
-        Route::delete('/quotes/{quote}',[Admin\QuoteController::class, 'destroy']);
+    // Dashboard
+    Route::get('/dashboard/stats', [Admin\DashboardController::class, 'stats']);
 
-        // Tours
-        Route::get('/tours',                         [Admin\TourController::class, 'index']);
-        Route::post('/tours',                        [Admin\TourController::class, 'store']);
-        Route::get('/tours/{tour}',                  [Admin\TourController::class, 'show']);
-        Route::put('/tours/{tour}',                  [Admin\TourController::class, 'update']);
-        Route::delete('/tours/{tour}',               [Admin\TourController::class, 'destroy']);
-        Route::patch('/tours/{tour}/publish',        [Admin\TourController::class, 'togglePublish']);
-        Route::post('/tours/{tour}/images',          [Admin\TourController::class, 'uploadImage']);
+    // Quotes
+    Route::get('/quotes',            [Admin\QuoteController::class, 'index']);
+    Route::get('/quotes/{quote}',    [Admin\QuoteController::class, 'show']);
+    Route::patch('/quotes/{quote}',  [Admin\QuoteController::class, 'update']);
+    Route::delete('/quotes/{quote}', [Admin\QuoteController::class, 'destroy']);
 
-        // Blog
-        Route::get('/blog',                          [Admin\BlogController::class, 'index']);
-        Route::post('/blog',                         [Admin\BlogController::class, 'store']);
-        Route::get('/blog/{blogPost}',               [Admin\BlogController::class, 'show']);
-        Route::put('/blog/{blogPost}',               [Admin\BlogController::class, 'update']);
-        Route::delete('/blog/{blogPost}',            [Admin\BlogController::class, 'destroy']);
-        Route::patch('/blog/{blogPost}/publish',     [Admin\BlogController::class, 'togglePublish']);
-        Route::post('/blog/{blogPost}/cover',        [Admin\BlogController::class, 'uploadCover']);
+    // Tours
+    Route::get('/tours',                  [Admin\TourController::class, 'index']);
+    Route::post('/tours',                 [Admin\TourController::class, 'store']);
+    Route::get('/tours/{tour}',           [Admin\TourController::class, 'show']);
+    Route::put('/tours/{tour}',           [Admin\TourController::class, 'update']);
+    Route::delete('/tours/{tour}',        [Admin\TourController::class, 'destroy']);
+    Route::patch('/tours/{tour}/publish', [Admin\TourController::class, 'togglePublish']);
+    Route::post('/tours/{tour}/images',   [Admin\TourController::class, 'uploadImage']);
 
-        // Bookings
-        Route::get('/bookings',                      [Admin\BookingController::class, 'index']);
-        Route::post('/bookings',                     [Admin\BookingController::class, 'store']);
-        Route::get('/bookings/{booking}',            [Admin\BookingController::class, 'show']);
-        Route::patch('/bookings/{booking}',          [Admin\BookingController::class, 'update']);
-        Route::delete('/bookings/{booking}',         [Admin\BookingController::class, 'destroy']);
+    // Blog
+    Route::get('/blog',                      [Admin\BlogController::class, 'index']);
+    Route::post('/blog',                     [Admin\BlogController::class, 'store']);
+    Route::get('/blog/{blogPost}',           [Admin\BlogController::class, 'show']);
+    Route::put('/blog/{blogPost}',           [Admin\BlogController::class, 'update']);
+    Route::delete('/blog/{blogPost}',        [Admin\BlogController::class, 'destroy']);
+    Route::patch('/blog/{blogPost}/publish', [Admin\BlogController::class, 'togglePublish']);
+    Route::post('/blog/{blogPost}/cover',    [Admin\BlogController::class, 'uploadCover']);
 
-        // Settings
-        Route::get('/settings',   [Admin\SettingsController::class, 'index']);
-        Route::patch('/settings', [Admin\SettingsController::class, 'update']);
-    });
+    // Bookings
+    Route::get('/bookings',              [Admin\BookingController::class, 'index']);
+    Route::post('/bookings',             [Admin\BookingController::class, 'store']);
+    Route::get('/bookings/{booking}',    [Admin\BookingController::class, 'show']);
+    Route::patch('/bookings/{booking}',  [Admin\BookingController::class, 'update']);
+    Route::delete('/bookings/{booking}', [Admin\BookingController::class, 'destroy']);
+
+    // Settings
+    Route::get('/settings',   [Admin\SettingsController::class, 'index']);
+    Route::patch('/settings', [Admin\SettingsController::class, 'update']);
 });
