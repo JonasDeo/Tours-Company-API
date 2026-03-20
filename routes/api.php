@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/quotes',      [Public\QuoteController::class, 'store']);
 Route::get('/tours',        [Public\TourController::class, 'index']);
 Route::get('/tours/{slug}', [Public\TourController::class, 'show']);
+Route::get('/settings',                      [Admin\SettingsController::class, 'index']);
 Route::get('/testimonials',                  [Public\TestimonialController::class, 'index']);
 Route::get('/blog',                          [Public\BlogController::class, 'index']);
 Route::get('/blog/{blogPost:slug}',          [Public\BlogController::class, 'show']);

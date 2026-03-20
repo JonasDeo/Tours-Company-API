@@ -7,7 +7,6 @@ use App\Models\Admin;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AdminAuthController extends Controller
 {
@@ -19,13 +18,17 @@ class AdminAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        $admin = Admin::where('email', $request->email)->first();
+        // Attempt login via the 'admin' JWT guard
+        $token = auth('admin')->attempt([
+            'email'    => $request->email,
+            'password' => $request->password,
+        ]);
 
-        if (! $admin || ! Hash::check($request->password, $admin->password)) {
+        if (!$token) {
             return response()->json(['message' => 'Invalid credentials.'], 401);
         }
 
-        $token = JWTAuth::fromUser($admin);
+        $admin = auth('admin')->user();
 
         return $this->tokenResponse($token, $admin);
     }
@@ -34,7 +37,7 @@ class AdminAuthController extends Controller
     public function refresh(): JsonResponse
     {
         try {
-            $token = JWTAuth::parseToken()->refresh();
+            $token = auth('admin')->refresh();
             return $this->tokenResponse($token, auth('admin')->user());
         } catch (\Exception $e) {
             return response()->json(['message' => 'Token refresh failed.'], 401);
@@ -44,7 +47,7 @@ class AdminAuthController extends Controller
     // POST /api/admin/logout
     public function logout(): JsonResponse
     {
-        JWTAuth::parseToken()->invalidate();
+        auth('admin')->logout();
         return response()->json(['message' => 'Logged out.']);
     }
 
@@ -65,21 +68,32 @@ class AdminAuthController extends Controller
         $admin = auth('admin')->user();
 
         $data = $request->validate([
-            'name'             => 'sometimes|string|max:100',
-            'email'            => 'sometimes|email|unique:admins,email,' . $admin->id,
-            'password'         => 'sometimes|string|min:8|confirmed',
+            'name'                  => 'sometimes|string|max:100',
+            'email'                 => 'sometimes|email|unique:admins,email,' . $admin->id,
+            'current_password'      => 'required_with:password|string',
+            'password'              => 'sometimes|string|min:8|confirmed',
+            'password_confirmation' => 'required_with:password|string',
         ]);
 
+        // Verify current password before allowing a change
         if (isset($data['password'])) {
+            if (!Hash::check($request->current_password, $admin->password)) {
+                return response()->json([
+                    'message' => 'The current password is incorrect.',
+                    'errors'  => ['current_password' => ['Current password is incorrect.']],
+                ], 422);
+            }
             $data['password'] = bcrypt($data['password']);
         }
+
+        unset($data['current_password'], $data['password_confirmation']);
 
         $admin->update($data);
 
         return response()->json(['message' => 'Profile updated.', 'admin' => $admin]);
     }
 
-    // ── Helper 
+    // ── Helper ────────────────────────────────────────────────────────────────
 
     private function tokenResponse(string $token, $admin): JsonResponse
     {
@@ -87,7 +101,7 @@ class AdminAuthController extends Controller
             'access_token' => $token,
             'token_type'   => 'bearer',
             'expires_in'   => config('jwt.ttl') * 60,
-            'admin' => [
+            'admin'        => [
                 'id'    => $admin->id,
                 'name'  => $admin->name,
                 'email' => $admin->email,
