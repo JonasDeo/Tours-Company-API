@@ -95,7 +95,7 @@
         View in Dashboard →
       </a>
     </div>
-    <div class="footer">Balbina Safaris Admin · Quote #{{ $quote->id }}</div>
+    <div class="footer">Native Kilimanjaro Admin · Quote #{{ $quote->id }}</div>
   </div>
 </body>
 </html>

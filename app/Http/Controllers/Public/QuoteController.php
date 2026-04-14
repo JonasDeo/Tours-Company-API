@@ -9,6 +9,7 @@ use App\Mail\QuoteReceived;
 use App\Models\Quote;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class QuoteController extends Controller
 {
@@ -17,13 +18,19 @@ class QuoteController extends Controller
     {
         $quote = Quote::create($request->validated());
 
-        // Email to client
-        Mail::to($quote->email)
-            ->queue(new QuoteReceived($quote));
+        // Send emails without blocking quote creation on provider issues.
+        try {
+            Mail::to($quote->email)->send(new QuoteReceived($quote));
+        } catch (Throwable $e) {
+            report($e);
+        }
 
-        // Email to admin
-        Mail::to(config('mail.admin_address', env('MAIL_FROM_ADDRESS')))
-            ->queue(new QuoteNotification($quote));
+        try {
+            Mail::to(config('mail.admin_address', env('MAIL_FROM_ADDRESS')))
+                ->send(new QuoteNotification($quote));
+        } catch (Throwable $e) {
+            report($e);
+        }
 
         return response()->json([
             'message' => 'Your quote request has been received. We\'ll be in touch within 24 hours.',

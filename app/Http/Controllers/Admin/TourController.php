@@ -77,7 +77,7 @@ class TourController extends Controller
 
         $upload = Cloudinary::uploadApi()->upload(
             $request->file('image')->getRealPath(),
-            ['folder' => 'balbina/tours']
+            ['folder' => 'native-kilimanjaro/tours']
         );
 
         $image = [

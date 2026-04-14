@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('cover_image')->nullable(); // Cloudinary URL
             $table->boolean('published')->default(false);
             $table->unsignedInteger('read_count')->default(0);
-            $table->string('author')->default('Balbina Safaris');
+            $table->string('author')->default('Native Kilimanjaro');
             $table->timestamps();
         });
     }

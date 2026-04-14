@@ -72,7 +72,7 @@ class BlogController extends Controller
 
         $upload = Cloudinary::uploadApi()->upload(
             $request->file('image')->getRealPath(),
-            ['folder' => 'balbina/blog']
+            ['folder' => 'native-kilimanjaro/blog']
         );
 
         $blogPost->update(['cover_image' => $upload['secure_url']]);

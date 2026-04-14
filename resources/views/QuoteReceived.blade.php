@@ -29,13 +29,13 @@
 <body>
   <div class="wrapper">
     <div class="header">
-      <h1>Balbina<span>Safaris</span></h1>
+      <h1>Native<span>Kilimanjaro</span></h1>
     </div>
     <div class="accent"></div>
     <div class="body">
       <h2>We've received your quote request, {{ $quote->first_name }}!</h2>
       <p>
-        Thank you for reaching out to Balbina Safaris. One of our safari specialists will
+        Thank you for reaching out to Native Kilimanjaro. One of our safari specialists will
         review your request and get back to you within <strong>24 hours</strong> — usually sooner.
       </p>
 
@@ -72,12 +72,12 @@
       <p style="margin-top: 32px; font-size: 13px; color: #888;">
         If you have any urgent questions, WhatsApp us at
         <a href="https://wa.me/255685808332" style="color: #c9a84c;">+255 685 808332</a>
-        or email <a href="mailto:info@balbinasafaris.com" style="color: #c9a84c;">info@balbinasafaris.com</a>.
+        or email <a href="mailto:info@nativekilimanjaro.com" style="color: #c9a84c;">info@nativekilimanjaro.com</a>.
       </p>
     </div>
     <div class="footer">
-      © {{ date('Y') }} Balbina Safaris · Arusha, Tanzania<br/>
-      <a href="{{ env('FRONTEND_URL') }}">balbinasafaris.com</a>
+      © {{ date('Y') }} Native Kilimanjaro · Arusha, Tanzania<br/>
+      <a href="{{ env('FRONTEND_URL') }}">nativekilimanjaro.com</a>
     </div>
   </div>
 </body>

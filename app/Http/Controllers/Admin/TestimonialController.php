@@ -44,7 +44,7 @@ class TestimonialController extends Controller
 
         $upload = Cloudinary::uploadApi()->upload(
             $request->file('image')->getRealPath(),
-            ['folder' => 'balbina/testimonials', 'transformation' => ['width' => 200, 'height' => 200, 'crop' => 'fill', 'gravity' => 'face']]
+            ['folder' => 'native-kilimanjaro/testimonials', 'transformation' => ['width' => 200, 'height' => 200, 'crop' => 'fill', 'gravity' => 'face']]
         );
 
         $testimonial->update(['avatar' => $upload['secure_url']]);

@@ -18,7 +18,7 @@ class QuoteReceived extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'We\'ve received your safari quote request — Balbina Safaris',
+            subject: 'We\'ve received your safari quote request — Native Kilimanjaro',
         );
     }
 
