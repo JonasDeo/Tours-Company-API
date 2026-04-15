@@ -17,7 +17,7 @@ class SettingsController extends Controller
                 'phone'    => '+255 623 880844',
                 'whatsapp' => '+255 685 808332',
                 'email'    => 'info@nativekilimanjaro.com',
-                'address'  => 'Arusha, Tanzania',
+                'address'  => 'Moshi, Tanzania',
                 'website'  => 'https://nativekilimanjaro.com',
             ]),
             'socials' => Setting::get('socials', [

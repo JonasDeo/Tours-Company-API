@@ -76,7 +76,7 @@
       </p>
     </div>
     <div class="footer">
-      © {{ date('Y') }} Native Kilimanjaro · Arusha, Tanzania<br/>
+      © {{ date('Y') }} Native Kilimanjaro · Moshi, Tanzania<br/>
       <a href="{{ env('FRONTEND_URL') }}">nativekilimanjaro.com</a>
     </div>
   </div>
