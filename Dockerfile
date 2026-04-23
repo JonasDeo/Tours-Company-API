@@ -3,6 +3,8 @@ FROM php:8.4-cli
 WORKDIR /app
 
 # Install system dependencies
+RUN docker-php-ext-install pdo pdo_mysql
+
 RUN apt-get update && apt-get install -y \
     unzip git curl libzip-dev zip \
     && docker-php-ext-install zip
