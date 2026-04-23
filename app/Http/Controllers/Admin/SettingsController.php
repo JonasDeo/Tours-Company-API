@@ -28,7 +28,7 @@ class SettingsController extends Controller
             ]),
             'seo' => Setting::get('seo', [
                 'metaTitle'       => 'Native Kilimanjaro — East Africa Safari Tours',
-                'metaDescription' => 'Luxury and custom safari tours across Tanzania, Kenya, Uganda, and Zanzibar.',
+                'metaDescription' => 'Luxury and custom safari tours across Tanzania, Kenya, Rwanda, and Zanzibar.',
                 'googleAnalytics' => '',
             ]),
         ]);
