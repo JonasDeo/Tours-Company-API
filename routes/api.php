@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Route::options('/{any}', function () {
+    return response()->noContent();
+})->where('any', '.*');
+
 Route::post('/quotes',      [Public\QuoteController::class, 'store']);
 Route::get('/tours',        [Public\TourController::class, 'index']);
 Route::get('/tours/{slug}', [Public\TourController::class, 'show']);
