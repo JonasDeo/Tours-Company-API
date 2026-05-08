@@ -14,8 +14,8 @@ class SettingsController extends Controller
     {
         return response()->json([
             'contact' => Setting::get('contact', [
-                'phone'    => '+255 623 880844',
-                'whatsapp' => '+255 685 808332',
+                'phone'    => '+255 624 307 997',
+                'whatsapp' => '+255 624 307 997',
                 'email'    => 'info@nativekilimanjaro.com',
                 'address'  => 'Moshi, Tanzania',
                 'website'  => 'https://nativekilimanjaro.com',
