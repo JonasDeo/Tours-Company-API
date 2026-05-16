@@ -71,7 +71,7 @@
 
       <p style="margin-top: 32px; font-size: 13px; color: #888;">
         If you have any urgent questions, WhatsApp us at
-        <a href="https://wa.me/255685808332" style="color: #c9a84c;">+255 685 808332</a>
+        <a href="https://wa.me/255685808332" style="color: #c9a84c;">+255 624 307 997</a>
         or email <a href="mailto:info@nativekilimanjaro.com" style="color: #c9a84c;">info@nativekilimanjaro.com</a>.
       </p>
     </div>
